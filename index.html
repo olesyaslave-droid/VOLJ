@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Fembo App</title>
-
 <style>
 body {
   margin: 0;
@@ -13,31 +12,28 @@ body {
   height: 100vh;
   background: #000;
   color: white;
+  justify-content: center;
+  align-items: center;
 }
 
 #photo-container {
-  flex: 1;
+  width: 90%;
+  max-width: 500px;
+  height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px solid #ff00ff;
   border-radius: 20px;
   margin: 10px;
-  overflow: hidden;
   background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(10px);
-}
-
-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
+  text-align: center;
 }
 
 .controls {
   display: flex;
   gap: 10px;
-  padding: 10px;
+  margin-bottom: 10px;
 }
 
 button {
@@ -58,17 +54,14 @@ button:disabled {
 }
 </style>
 </head>
-
 <body>
 
-<div id="photo-container">
-  Нажми «ЕЩЕ»
-</div>
+<div id="photo-container">Нажми «ЕЩЕ»</div>
 
 <div class="controls">
   <button onclick="goBack()">⬅ Назад</button>
   <button onclick="toggleFav()">⭐ Избранное</button>
-  <button onclick="openPost()">🔍 Увеличить</button>
+  <button onclick="openPost()">🔍 Открыть</button>
 </div>
 
 <button id="nextBtn" onclick="loadPhoto()">🔥 ЕЩЕ!</button>
@@ -77,7 +70,7 @@ button:disabled {
 var tg = window.Telegram && window.Telegram.WebApp;
 if (tg) tg.expand();
 
-// Настройки каналов
+// Каналы
 var sources = [
   { name: "femboyzl", max: 9910 },
   { name: "kotiki_uwu_2", max: 1468 }
@@ -88,14 +81,9 @@ var history = [];
 var favs = JSON.parse(localStorage.getItem("favs") || "[]");
 var currentPost = null;
 var lastPost = null;
-var locked = false;
 
 // Загрузка нового поста
 function loadPhoto() {
-  if (locked) return;
-  locked = true;
-  document.getElementById("nextBtn").disabled = true;
-
   var post;
   do {
     var src = sources[Math.floor(Math.random() * sources.length)];
@@ -109,32 +97,28 @@ function loadPhoto() {
   showPost(post);
 }
 
-// Отображение embed поста
+// Отображение поста (только текст, без embed)
 function showPost(post) {
   currentPost = post;
   lastPost = post;
 
   var container = document.getElementById("photo-container");
-  container.innerHTML =
-    "<iframe src='https://t.me/" + post.name + "/" + post.id + "?embed=1'></iframe>";
+  container.innerHTML = "Пост: <br>@" + post.name + "/" + post.id;
 
   updateFavButton();
 
-  // Разблокировка кнопки сразу
-  locked = false;
-  document.getElementById("nextBtn").disabled = false;
-
+  // Haptic feedback
   if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("medium");
 }
 
-// Кнопка "назад"
+// Назад
 function goBack() {
-  if (!history.length || locked) return;
+  if (!history.length) return;
   var prev = history.pop();
   showPost(prev);
 }
 
-// Кнопка "избранное"
+// Избранное
 function toggleFav() {
   if (!currentPost) return;
   var key = currentPost.name + "/" + currentPost.id;
@@ -152,7 +136,7 @@ function updateFavButton() {
   btn.textContent = favs.indexOf(key) !== -1 ? "💖 Избранное" : "⭐ Избранное";
 }
 
-// Кнопка "увеличить" — открывает пост в Telegram viewer
+// Увеличить / открыть в Telegram
 function openPost() {
   if (!currentPost) return;
   var url = "https://t.me/" + currentPost.name + "/" + currentPost.id;
@@ -163,6 +147,7 @@ function openPost() {
 
 </body>
 </html>
+
 
 
 
