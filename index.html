@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,14 +13,14 @@ body {
   height: 100vh;
   background: #000;
   color: white;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 #photo-container {
   width: 90%;
   max-width: 500px;
-  height: 300px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,29 +29,38 @@ body {
   margin: 10px;
   background: rgba(0,0,0,0.5);
   text-align: center;
+  font-size: 1.2rem;
 }
 
 .controls {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
+  width: 90%;
+  max-width: 500px;
 }
 
 button {
   flex: 1;
-  padding: 14px;
+  padding: 10px;
   background: #ff00ff;
   border: none;
-  border-radius: 30px;
+  border-radius: 25px;
   color: white;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
 }
 
 button:disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+#nextBtn {
+  width: 90%;
+  max-width: 500px;
+  margin-bottom: 10px;
 }
 </style>
 </head>
@@ -82,7 +92,7 @@ var favs = JSON.parse(localStorage.getItem("favs") || "[]");
 var currentPost = null;
 var lastPost = null;
 
-// Загрузка нового поста
+// Функция для генерации нового поста
 function loadPhoto() {
   var post;
   do {
@@ -97,28 +107,27 @@ function loadPhoto() {
   showPost(post);
 }
 
-// Отображение поста (только текст, без embed)
+// Показ поста в мини-аппе (только текст)
 function showPost(post) {
   currentPost = post;
   lastPost = post;
 
   var container = document.getElementById("photo-container");
-  container.innerHTML = "Пост: <br>@" + post.name + "/" + post.id;
+  container.innerHTML = "Пост:<br>@" + post.name + "/" + post.id;
 
   updateFavButton();
 
-  // Haptic feedback
   if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("medium");
 }
 
-// Назад
+// Кнопка Назад
 function goBack() {
   if (!history.length) return;
   var prev = history.pop();
   showPost(prev);
 }
 
-// Избранное
+// Кнопка Избранное
 function toggleFav() {
   if (!currentPost) return;
   var key = currentPost.name + "/" + currentPost.id;
@@ -136,7 +145,7 @@ function updateFavButton() {
   btn.textContent = favs.indexOf(key) !== -1 ? "💖 Избранное" : "⭐ Избранное";
 }
 
-// Увеличить / открыть в Telegram
+// Кнопка Открыть пост в Telegram viewer
 function openPost() {
   if (!currentPost) return;
   var url = "https://t.me/" + currentPost.name + "/" + currentPost.id;
