@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Fembo App</title>
+
+<style>
+body {
+  background-image: url("https://w.wallhaven.cc/full/m9/wallhaven-m93628.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#photo-container {
+  width: 100%;
+  flex-grow: 1;
+  border: 2px solid #ff00ff;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #ff00ff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+button {
+  padding: 14px 18px;
+  background: #ff00ff;
+  border: none;
+  border-radius: 40px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(255,0,255,0.4);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+</style>
+</head>
+
+<body>
+
+<div id="photo-container">
+  <p style="color:white">Нажми на кнопку…</p>
+</div>
+
+<div class="controls">
+  <button onclick="goBack()">⬅</button>
+  <button onclick="toggleFav()">⭐</button>
+  <button onclick="sharePost()">📤</button>
+</div>
+
+<button id="nextBtn" onclick="loadPhoto()">🔥 ЕЩЕ!</button>
+
+<script>
+var tg = window.Telegram && window.Telegram.WebApp;
+if (tg) tg.expand();
+
+var sources = [
+  { name: "femboyzl", max: 9910 },
+  { name: "kotiki_uwu_2", max: 1468 }
+];
+
+var lastPost = null;
+var currentPost = null;
+var history = [];
+var favs = JSON.parse(localStorage.getItem("favs") || "[]");
+
+var locked = false;
+var tryCount = 0;
+var MAX_TRIES = 10;
+
+function loadPhoto() {
+  if (locked) return;
+  locked = true;
+  document.getElementById("nextBtn").disabled = true;
+
+  var post;
+  do {
+    var src = sources[Math.floor(Math.random() * sources.length)];
+    var gap = 300;
+    var max = Math.max(1, src.max - gap);
+    var id = Math.floor(Math.random() * max) + 1;
+    post = { name: src.name, id: id };
+  } while (
+    lastPost &&
+    post.name === lastPost.name &&
+    post.id === lastPost.id
+  );
+
+  if (currentPost) history.push(currentPost);
+  showPost(post);
+}
+
+function showPost(post) {
+  currentPost = post;
+  lastPost = post;
+  tryCount++;
+
+  var container = document.getElementById("photo-container");
+  container.innerHTML =
+    "<iframe id=\"tgframe\" src=\"https://t.me/" +
+    post.name +
+    "/" +
+    post.id +
+    "?embed=1\"></iframe>";
+
+  updateFavButton();
+
+  setTimeout(function () {
+    var frame = document.getElementById("tgframe");
+
+    var failed =
+      !frame ||
+      frame.offsetHeight < 100 ||
+      frame.offsetWidth < 100;
+
+    if (failed) {
+      if (tryCount < MAX_TRIES) {
+        loadPhoto();
+        return;
+      } else {
+        container.innerHTML =
+          "<p style=\"color:white\">Контент недоступен</p>";
+      }
+    }
+
+    tryCount = 0;
+    locked = false;
+    document.getElementById("nextBtn").disabled = false;
+  }, 1300);
+
+  if (tg && tg.HapticFeedback) {
+    tg.HapticFeedback.impactOccurred("medium");
+  }
+}
+
+function goBack() {
+  if (!history.length || locked) return;
+  showPost(history.pop());
+}
+
+function toggleFav() {
+  if (!currentPost) return;
+  var key = currentPost.name + "/" + currentPost.id;
+  var i = favs.indexOf(key);
+  if (i === -1) favs.push(key);
+  else favs.splice(i, 1);
+  localStorage.setItem("favs", JSON.stringify(favs));
+  updateFavButton();
+}
+
+function updateFavButton() {
+  var btn = document.querySelector(".controls button:nth-child(2)");
+  if (!currentPost) {
+    btn.textContent = "⭐";
+    return;
+  }
+  var key = currentPost.name + "/" + currentPost.id;
+  btn.textContent = favs.indexOf(key) !== -1 ? "💖" : "⭐";
+}
+
+function sharePost() {
+  if (!currentPost) return;
+  window.open(
+    "https://t.me/" + currentPost.name + "/" + currentPost.id,
+    "_blank"
+  );
+}
+</script>
+
+</body>
+</html>
