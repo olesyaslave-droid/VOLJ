@@ -80,13 +80,10 @@ button#favorite {
 
 <script>
 // === СПИСОК ФОТОК ===
-const photos = [
-  "fem (1).jpg",
-  "fem (2).jpg",
-  "fem (3).jpg",
-  // ...
-  "fem (389).jpg"
-];
+const photos = [];
+for (let i = 1; i <= 389; i++) {
+  photos.push(`fem (${i}).jpg`);
+}
 
 // === Состояние приложения ===
 let currentIndex = -1;
@@ -146,6 +143,7 @@ loadRandom();
 </script>
 </body>
 </html>
+
 
 
 
