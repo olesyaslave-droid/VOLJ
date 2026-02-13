@@ -120,11 +120,9 @@ function showPost(post) {
 
   updateFavButton();
 
-  // Разблокировка кнопки
-  setTimeout(function () {
-    locked = false;
-    document.getElementById("nextBtn").disabled = false;
-  }, 600);
+  // Разблокировка кнопки сразу
+  locked = false;
+  document.getElementById("nextBtn").disabled = false;
 
   if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("medium");
 }
@@ -165,5 +163,6 @@ function openPost() {
 
 </body>
 </html>
+
 
 
