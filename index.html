@@ -17,7 +17,7 @@ button { width: 90%; padding: 25px; background: magenta; color: white; border: n
 function go() {
 var ch = ['femboyzl', 'kotiki_uwu_2'];
 var id = Math.floor(Math.random() * 1000) + 500;
-var url = "[подозрительная ссылка удалена]" + ch[Math.floor(Math.random() * 2)] + "/" + id;
+var url = "https://t.me/" + ch[Math.floor(Math.random() * 2)] + "/" + id;
 if (window.Telegram && window.Telegram.WebApp) {
 window.Telegram.WebApp.openLink(url);
 } else {
@@ -27,6 +27,7 @@ window.open(url, '_blank');
 </script>
 </body>
 </html>
+
 
 
 
