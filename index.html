@@ -1,171 +1,31 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Fembo App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body {
-  margin: 0;
-  font-family: sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: #000;
-  color: #fff;
-}
-
-#photo-container {
-  width: 90%;
-  max-width: 400px;
-  height: 250px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #ff00ff;
-  border-radius: 20px;
-  margin: 10px;
-  background: rgba(0,0,0,0.5);
-  text-align: center;
-  cursor: pointer;
-}
-
-#photo-container img {
-  max-width: 100%;
-  max-height: 150px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-  width: 90%;
-  max-width: 400px;
-  margin-bottom: 10px;
-}
-
-button {
-  flex: 1;
-  padding: 10px;
-  background: #ff00ff;
-  border: none;
-  border-radius: 25px;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-#nextBtn {
-  width: 90%;
-  max-width: 400px;
-  padding: 12px;
-  margin-bottom: 10px;
-}
+body { background: #000; color: #fff; text-align: center; font-family: sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; height: 100vh; }
+#box { width: 95%; height: 70vh; border: 2px solid #ff00ff; margin-top: 10px; border-radius: 15px; overflow: hidden; }
+iframe { width: 100%; height: 100%; border: none; }
+button { width: 90%; padding: 20px; background: #ff00ff; color: #fff; border: none; border-radius: 15px; font-size: 20px; margin-top: 20px; font-weight: bold; }
 </style>
 </head>
 <body>
-
-<div id="photo-container" onclick="openPost()">
-  Нажми «ЕЩЕ» для поста
-</div>
-
-<div class="controls">
-  <button onclick="goBack()">⬅ Назад</button>
-  <button onclick="toggleFav()">⭐ Избранное</button>
-  <button onclick="openPost()">🔍 Открыть</button>
-</div>
-
-<button id="nextBtn" onclick="loadPhoto()">🔥 ЕЩЕ!</button>
-
+<div id="box"><iframe id="f" src=""></iframe></div>
+<button onclick="next()">🔥 ЕЩЕ!</button>
 <script>
-var tg = window.Telegram && window.Telegram.WebApp;
-if (tg) tg.expand();
-
-// Настройки каналов
-var sources = [
-  { name: "femboyzl", max: 9910 },
-  { name: "kotiki_uwu_2", max: 1468 }
-];
-
-var history = [];
-var favs = JSON.parse(localStorage.getItem("favs") || "[]");
-var currentPost = null;
-var lastPost = null;
-
-// Генерация нового поста
-function loadPhoto() {
-  var post;
-  do {
-    var src = sources[Math.floor(Math.random() * sources.length)];
-    var gap = 300;
-    var max = Math.max(1, src.max - gap);
-    var id = Math.floor(Math.random() * max) + 1;
-    post = { name: src.name, id: id };
-  } while (lastPost && post.name === lastPost.name && post.id === lastPost.id);
-
-  if (currentPost) history.push(currentPost);
-  showPost(post);
-}
-
-// Отображение поста с превью
-function showPost(post) {
-  currentPost = post;
-  lastPost = post;
-
-  var container = document.getElementById("photo-container");
-  var imgUrl = "https://t.me/" + post.name + "/" + post.id + "?embed=1"; // мини-превью
-  container.innerHTML = "<img src='" + imgUrl + "' alt='Превью поста'><div>@" + post.name + "/" + post.id + "</div>";
-
-  updateFavButton();
-
-  if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("medium");
-}
-
-// История назад
-function goBack() {
-  if (!history.length) return;
-  var prev = history.pop();
-  showPost(prev);
-}
-
-// Избранное
-function toggleFav() {
-  if (!currentPost) return;
-  var key = currentPost.name + "/" + currentPost.id;
-  var idx = favs.indexOf(key);
-  if (idx === -1) favs.push(key);
-  else favs.splice(idx, 1);
-  localStorage.setItem("favs", JSON.stringify(favs));
-  updateFavButton();
-}
-
-function updateFavButton() {
-  var btn = document.querySelector(".controls button:nth-child(2)");
-  if (!currentPost) { btn.textContent = "⭐ Избранное"; return; }
-  var key = currentPost.name + "/" + currentPost.id;
-  btn.textContent = favs.indexOf(key) !== -1 ? "💖 Избранное" : "⭐ Избранное";
-}
-
-// Открыть пост в Telegram viewer
-function openPost() {
-  if (!currentPost) return;
-  var url = "https://t.me/" + currentPost.name + "/" + currentPost.id;
-  if (tg) tg.openLink(url);
-  else window.open(url, "_blank");
+function next() {
+var c = ['femboyzl', 'kotiki_uwu_2'];
+var m = [9900, 1400];
+var i = Math.floor(Math.random() * c.length);
+var id = Math.floor(Math.random() * m[i]) + 1;
+document.getElementById('f').src = "[подозрительная ссылка удалена]" + c[i] + "/" + id + "?embed=1";
 }
 </script>
-
 </body>
 </html>
+
 
 
 
