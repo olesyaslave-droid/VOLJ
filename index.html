@@ -4,30 +4,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VOLJ</title>
+<script src=""></script>
 <style>
-body { background: #111; color: #fff; text-align: center; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-h1 { color: #ff00ff; font-size: 24px; }
-.card { width: 85%; padding: 30px; border: 3px dashed #ff00ff; border-radius: 20px; margin-bottom: 20px; }
-button { width: 90%; padding: 25px; background: #ff00ff; color: #fff; border: none; border-radius: 15px; font-size: 22px; font-weight: bold; cursor: pointer; }
+body { background: black; color: magenta; text-align: center; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+button { width: 90%; padding: 25px; background: magenta; color: white; border: none; border-radius: 15px; font-size: 20px; font-weight: bold; }
 </style>
 </head>
 <body>
 <h1>VOLJ APP</h1>
-<div class="card">
-<p id="status">Нажми кнопку, чтобы найти контент</p>
-</div>
 <button onclick="go()">🔥 СЛЕДУЮЩИЙ ПОСТ</button>
-
 <script>
 function go() {
-var channels = ['femboyzl', 'kotiki_uwu_2'];
-var maxes = [9900, 1400];
-var r = Math.floor(Math.random() * channels.length);
-var id = Math.floor(Math.random() * maxes[r]) + 1;
-var url = "[подозрительная ссылка удалена]" + channels[r] + "/" + id;
-
-// Это откроет пост прямо поверх приложения в Telegram
+var ch = ['femboyzl', 'kotiki_uwu_2'];
+var id = Math.floor(Math.random() * 1000) + 500;
+var url = "[подозрительная ссылка удалена]" + ch[Math.floor(Math.random() * 2)] + "/" + id;
 if (window.Telegram && window.Telegram.WebApp) {
 window.Telegram.WebApp.openLink(url);
 } else {
@@ -35,9 +25,9 @@ window.open(url, '_blank');
 }
 }
 </script>
-
 </body>
 </html>
+
 
 
 
