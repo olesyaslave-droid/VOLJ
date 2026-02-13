@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <title>Fembo App</title>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+  // Telegram разворачивание на весь экран
+  const tg = window.Telegram.WebApp;
+  tg.expand();
+</script>
+
 <style>
 body {
   margin: 0;
@@ -37,7 +44,7 @@ body {
   align-items: center;
   padding: 8px 0;
   background: rgba(0,0,0,0.4);
-  gap: 20px;
+  gap: 15px;
 }
 
 button {
@@ -45,9 +52,9 @@ button {
   color: #fff;
   border: none;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  font-size: 24px;
+  width: 45px;
+  height: 45px;
+  font-size: 22px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -63,7 +70,6 @@ button:active {
 button#favorite {
   font-size: 20px;
 }
-
 </style>
 </head>
 <body>
@@ -96,12 +102,15 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const favBtn = document.getElementById('favorite');
 
-// === Загрузка случайного фото ===
+// === Загрузка случайного фото с проверкой на повтор ===
 function loadRandom() {
+  if (photos.length === 0) return;
   let index;
+  let attempts = 0;
   do {
     index = Math.floor(Math.random() * photos.length);
-  } while (index === currentIndex && photos.length > 1); // антиповтор
+    attempts++;
+  } while (index === currentIndex && attempts < 10);
   currentIndex = index;
   history.push(currentIndex);
   imgEl.src = `images/${photos[currentIndex]}`;
@@ -139,7 +148,6 @@ favBtn.onclick = toggleFavorite;
 
 // === Старт ===
 loadRandom();
-
 </script>
 </body>
 </html>
