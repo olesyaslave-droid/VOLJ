@@ -4,27 +4,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLJ</title>
 <style>
-body { background: #000; color: #fff; text-align: center; font-family: sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; height: 100vh; }
-#box { width: 95%; height: 70vh; border: 2px solid #ff00ff; margin-top: 10px; border-radius: 15px; overflow: hidden; }
-iframe { width: 100%; height: 100%; border: none; }
-button { width: 90%; padding: 20px; background: #ff00ff; color: #fff; border: none; border-radius: 15px; font-size: 20px; margin-top: 20px; font-weight: bold; }
+body { background: #111; color: #fff; text-align: center; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+h1 { color: #ff00ff; font-size: 24px; }
+.card { width: 85%; padding: 30px; border: 3px dashed #ff00ff; border-radius: 20px; margin-bottom: 20px; }
+button { width: 90%; padding: 25px; background: #ff00ff; color: #fff; border: none; border-radius: 15px; font-size: 22px; font-weight: bold; cursor: pointer; }
 </style>
 </head>
 <body>
-<div id="box"><iframe id="f" src=""></iframe></div>
-<button onclick="next()">🔥 ЕЩЕ!</button>
+<h1>VOLJ APP</h1>
+<div class="card">
+<p id="status">Нажми кнопку, чтобы найти контент</p>
+</div>
+<button onclick="go()">🔥 СЛЕДУЮЩИЙ ПОСТ</button>
+
 <script>
-function next() {
-var c = ['femboyzl', 'kotiki_uwu_2'];
-var m = [9900, 1400];
-var i = Math.floor(Math.random() * c.length);
-var id = Math.floor(Math.random() * m[i]) + 1;
-document.getElementById('f').src = "[подозрительная ссылка удалена]" + c[i] + "/" + id + "?embed=1";
+function go() {
+var channels = ['femboyzl', 'kotiki_uwu_2'];
+var maxes = [9900, 1400];
+var r = Math.floor(Math.random() * channels.length);
+var id = Math.floor(Math.random() * maxes[r]) + 1;
+var url = "[подозрительная ссылка удалена]" + channels[r] + "/" + id;
+
+// Это откроет пост прямо поверх приложения в Telegram
+if (window.Telegram && window.Telegram.WebApp) {
+window.Telegram.WebApp.openLink(url);
+} else {
+window.open(url, '_blank');
+}
 }
 </script>
+
 </body>
 </html>
+
 
 
 
